@@ -1,0 +1,1251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<meta name="description" content="L'Amour Interior Designs — Premium dark luxury interior design with AI-powered image generation"/>
+<meta property="og:title" content="L'Amour Interior Designs — Dark Luxury Interiors"/>
+<meta property="og:description" content="Describe your vision. Our AI transforms it into stunning photorealistic interior designs — dark luxury, minimalist, cyberpunk, any aesthetic."/>
+<meta property="og:type" content="website"/>
+<meta property="og:url" content="https://lamourdesigns.in"/>
+<meta property="og:image" content="https://lamourdesigns.in/og-preview.jpg"/>
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:title" content="L'Amour Interior Designs — AI-Powered Dark Luxury"/>
+<meta name="twitter:description" content="Generate stunning photorealistic interior designs with AI."/>
+<meta name="theme-color" content="#0B0B0B"/>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' fill='%230B0B0B' rx='6'/><text x='16' y='23' text-anchor='middle' font-size='18' fill='%23c9a96e'>✦</text></svg>"/>
+<title>L'Amour Interior Designs — Dark Luxury Interiors</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,900;1,400;1,700&family=DM+Sans:wght@200;300;400;500;600&display=swap"/>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,900;1,400;1,700&family=DM+Sans:wght@200;300;400;500;600&display=swap" rel="stylesheet" media="print" onload="this.media='all'"/>
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,900;1,400;1,700&family=DM+Sans:wght@200;300;400;500;600&display=swap"/></noscript>
+<!-- BUG-13 FIXED: Removed Three.js + GSAP (680KB dead weight — never used) -->
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --black:#080808;
+  --obsidian:#0B0B0B;
+  --charcoal:#141414;
+  --charcoal2:#1a1a1a;
+  --emerald:#0F3D2E;
+  --emerald-bright:#1a5e42;
+  --emerald-glow:rgba(15,61,46,0.6);
+  --gold:#c9a96e;
+  --gold-light:#e2c48a;
+  --white:#f5f0ea;
+  --muted:rgba(245,240,234,0.42);
+  --muted2:rgba(245,240,234,0.22);
+  --border:rgba(255,255,255,0.06);
+  --border2:rgba(201,169,110,0.15);
+  --glass:rgba(20,20,20,0.7);
+}
+html{scroll-behavior:smooth;font-size:16px}
+body{background:var(--obsidian);color:var(--white);font-family:'DM Sans',sans-serif;overflow-x:hidden;cursor:none;}
+#cursor{position:fixed;pointer-events:none;z-index:9999;mix-blend-mode:difference;}
+.c-dot{width:8px;height:8px;background:var(--gold);border-radius:50%;transform:translate(-50%,-50%);transition:transform .15s ease,width .3s,height .3s,background .3s;position:fixed;pointer-events:none;z-index:9999;}
+.c-ring{position:fixed;width:40px;height:40px;border:1px solid rgba(201,169,110,0.5);border-radius:50%;transform:translate(-50%,-50%);pointer-events:none;z-index:9998;transition:width .3s,height .3s,border-color .3s;}
+body.hovering .c-dot{width:14px;height:14px;background:var(--gold-light);}
+body.hovering .c-ring{width:56px;height:56px;border-color:rgba(201,169,110,0.8);}
+#bg-canvas{position:fixed;inset:0;z-index:0;pointer-events:none;}
+.noise{position:fixed;inset:0;z-index:1;pointer-events:none;opacity:0.035;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");}
+nav{position:fixed;top:0;left:0;right:0;z-index:500;display:flex;align-items:center;justify-content:space-between;padding:22px 64px;background:rgba(8,8,8,0.6);backdrop-filter:blur(28px) saturate(180%);border-bottom:1px solid var(--border);transition:background .3s;}
+.logo-mark{font-family:'Playfair Display',serif;font-size:1.65rem;font-weight:900;letter-spacing:.12em;color:var(--gold);text-decoration:none;}
+.logo-mark em{font-style:normal;color:var(--white);font-weight:400;}
+.nav-links{display:flex;gap:36px;list-style:none;}
+.nav-links a{color:var(--muted);text-decoration:none;font-size:.8rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;transition:color .3s;position:relative;}
+.nav-links a::after{content:'';position:absolute;bottom:-3px;left:0;width:0;height:1px;background:var(--gold);transition:width .3s ease;}
+.nav-links a:hover{color:var(--white);}
+.nav-links a:hover::after{width:100%;}
+.nav-cta{background:transparent;border:1px solid var(--border2);color:var(--gold);padding:10px 28px;border-radius:2px;font-family:'DM Sans',sans-serif;font-size:.8rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;cursor:none;transition:all .3s;}
+.nav-cta:hover{background:var(--emerald);border-color:var(--emerald-bright);color:var(--white);}
+#hero{position:relative;min-height:100vh;display:flex;align-items:center;overflow:hidden;z-index:2;}
+.hero-bg{position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 60% 50%,rgba(15,61,46,0.25) 0%,transparent 70%),radial-gradient(ellipse 40% 40% at 20% 80%,rgba(201,169,110,0.05) 0%,transparent 60%);}
+.hero-content{position:relative;z-index:10;padding:160px 64px 80px;max-width:720px;}
+.hero-eyebrow{display:inline-flex;align-items:center;gap:10px;margin-bottom:32px;opacity:0;}
+.eyebrow-line{width:32px;height:1px;background:var(--gold);}
+.eyebrow-text{font-size:.72rem;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);}
+.hero-title{font-family:'Playfair Display',serif;font-size:clamp(3.5rem,6.5vw,6.5rem);line-height:.98;font-weight:900;letter-spacing:-.02em;margin-bottom:32px;opacity:0;}
+.hero-title .line{display:block;overflow:hidden;}
+.hero-title .line span{display:block;}
+.hero-title .accent{color:var(--gold);font-style:italic;font-weight:400;}
+.hero-sub{font-size:1rem;color:var(--muted);line-height:1.85;max-width:480px;margin-bottom:48px;font-weight:300;opacity:0;}
+.hero-actions{display:flex;gap:16px;flex-wrap:wrap;opacity:0;}
+.btn-primary{background:var(--emerald);border:1px solid var(--emerald-bright);color:var(--white);padding:16px 44px;font-family:'DM Sans',sans-serif;font-size:.82rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;cursor:none;border-radius:2px;transition:all .35s;position:relative;overflow:hidden;}
+.btn-primary::before{content:'';position:absolute;inset:0;background:var(--emerald-bright);transform:translateX(-101%);transition:transform .35s ease;}
+.btn-primary:hover::before{transform:translateX(0);}
+.btn-primary span{position:relative;z-index:1;}
+.btn-outline{background:transparent;border:1px solid var(--border2);color:var(--gold);padding:16px 44px;font-family:'DM Sans',sans-serif;font-size:.82rem;font-weight:500;letter-spacing:.12em;text-transform:uppercase;cursor:none;border-radius:2px;transition:all .3s;}
+.btn-outline:hover{border-color:var(--gold);color:var(--white);}
+.hero-visual{position:absolute;right:0;top:0;bottom:0;width:52%;z-index:5;overflow:hidden;}
+.hero-img-wrap{width:100%;height:100%;position:relative;}
+.hero-img-wrap::before{content:'';position:absolute;inset:0;background:linear-gradient(to right,var(--obsidian) 0%,transparent 30%,transparent 70%,rgba(8,8,8,0.4) 100%);z-index:2;}
+.room-illustration{width:100%;height:100%;position:relative;overflow:hidden;}
+.room-bg-gradient{position:absolute;inset:0;background:linear-gradient(180deg,#0d2420 0%,#0a1a14 40%,#060e0b 100%);}
+.room-el{position:absolute;border-radius:4px;}
+.sofa{bottom:25%;left:15%;width:52%;height:22%;background:linear-gradient(135deg,#1a3d30,#0e2a20);border-radius:8px 8px 4px 4px;box-shadow:0 20px 60px rgba(0,0,0,0.7),inset 0 2px 0 rgba(255,255,255,0.05);}
+.sofa::before{content:'';position:absolute;top:20%;left:5%;right:5%;height:45%;background:linear-gradient(135deg,#22503f,#163828);border-radius:4px;}
+.sofa::after{content:'';position:absolute;bottom:0;left:-4%;right:-4%;height:18%;background:#0a1e16;border-radius:0 0 6px 6px;}
+.plant-pot{position:absolute;bottom:22%;right:12%;width:5%;padding-bottom:8%;}
+.plant-stem{position:absolute;bottom:100%;left:50%;transform:translateX(-50%);width:2px;height:200%;background:linear-gradient(#1a4d30,#2a7050);}
+.window-light{position:absolute;top:0;right:8%;width:28%;height:75%;background:linear-gradient(180deg,rgba(201,169,110,0.08) 0%,rgba(201,169,110,0.02) 70%,transparent 100%);clip-path:polygon(10% 0,90% 0,85% 100%,15% 100%);}
+.window-frame{position:absolute;top:5%;right:12%;width:20%;height:60%;border:1px solid rgba(201,169,110,0.2);border-radius:2px;}
+.coffee-table{position:absolute;bottom:22%;left:25%;width:28%;height:6%;background:#0a1810;border-radius:3px;box-shadow:0 4px 20px rgba(0,0,0,0.6);}
+.rug{position:absolute;bottom:18%;left:10%;width:60%;height:8%;background:radial-gradient(ellipse,rgba(15,61,46,0.3) 0%,transparent 70%);border-radius:50%;}
+.floor-lamp{position:absolute;bottom:22%;left:5%;width:2%;height:40%;display:flex;flex-direction:column;align-items:center;}
+.lamp-pole{flex:1;width:2px;background:rgba(201,169,110,0.4);}
+.lamp-head{width:24px;height:14px;background:rgba(201,169,110,0.2);border-radius:50%;}
+.lamp-glow{position:absolute;bottom:55%;left:-200%;width:450%;height:300%;background:radial-gradient(ellipse,rgba(201,169,110,0.08) 0%,transparent 60%);animation:lampPulse 4s ease-in-out infinite;}
+@keyframes lampPulse{0%,100%{opacity:.6;}50%{opacity:1;}}
+.art-frame{position:absolute;top:12%;left:20%;width:22%;height:28%;background:linear-gradient(135deg,#0f2820,#142d22);border:1px solid rgba(201,169,110,0.15);border-radius:2px;}
+.shelf{position:absolute;top:38%;right:6%;width:18%;height:2px;background:rgba(255,255,255,0.08);}
+.vase{position:absolute;bottom:0;right:20%;width:14%;height:100%;background:linear-gradient(135deg,rgba(201,169,110,0.1),rgba(201,169,110,0.05));border-radius:6px 6px 4px 4px;}
+.floating-badge{position:absolute;z-index:20;background:rgba(14,14,14,0.85);backdrop-filter:blur(16px);border:1px solid var(--border2);border-radius:12px;padding:14px 20px;}
+.fb-1{bottom:32%;left:4%;animation:floatY 5s ease-in-out infinite;}
+.fb-2{top:28%;right:2%;animation:floatY 6s ease-in-out infinite .8s;}
+.fb-3{bottom:15%;right:5%;animation:floatY 4.5s ease-in-out infinite 1.6s;}
+@keyframes floatY{0%,100%{transform:translateY(0);}50%{transform:translateY(-10px);}}
+.fb-label{font-size:.62rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:4px;}
+.fb-value{font-family:'Playfair Display',serif;font-size:1.1rem;color:var(--gold);font-weight:600;}
+.fb-sub{font-size:.7rem;color:var(--muted2);}
+.marquee-wrap{position:relative;z-index:2;border-top:1px solid var(--border);border-bottom:1px solid var(--border);background:var(--charcoal);overflow:hidden;padding:18px 0;}
+.marquee-track{display:flex;width:max-content;animation:marquee 28s linear infinite;}
+@keyframes marquee{0%{transform:translateX(0);}100%{transform:translateX(-50%);}}
+.marquee-item{display:flex;align-items:center;gap:24px;padding:0 40px;white-space:nowrap;font-size:.7rem;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);}
+.marquee-dot{width:4px;height:4px;border-radius:50%;background:var(--gold);display:inline-block;}
+.section{position:relative;z-index:2;padding:120px 64px;}
+.section-header{margin-bottom:72px;}
+.section-tag{font-size:.68rem;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);margin-bottom:16px;display:flex;align-items:center;gap:12px;}
+.section-tag::before{content:'';width:24px;height:1px;background:var(--gold);}
+.section-title{font-family:'Playfair Display',serif;font-size:clamp(2.4rem,4vw,4rem);line-height:1.1;font-weight:700;letter-spacing:-.01em;}
+.section-title em{font-style:italic;color:var(--gold);font-weight:400;}
+#services{background:var(--charcoal);}
+.services-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border);}
+.service-card{background:var(--charcoal);padding:48px 40px;transition:background .3s;position:relative;overflow:hidden;cursor:none;}
+.service-card::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at var(--mx,50%) var(--my,50%),rgba(201,169,110,0.15) 0%,transparent 60%);opacity:0;transition:opacity .3s;}
+.service-card:hover::before{opacity:1;}
+.service-card:hover{background:rgba(15,61,46,0.3);}
+.service-icon{font-size:2.4rem;margin-bottom:20px;}
+.service-title{font-family:'Playfair Display',serif;font-size:1.4rem;margin-bottom:12px;color:var(--white);}
+.service-desc{font-size:.9rem;color:var(--muted);line-height:1.7;}
+#templates{background:var(--obsidian);}
+.templates-filters{display:flex;gap:12px;margin-bottom:48px;flex-wrap:wrap;}
+.filter-btn{background:transparent;border:1px solid var(--border2);color:var(--muted);padding:8px 20px;font-size:.75rem;letter-spacing:.1em;text-transform:uppercase;cursor:none;transition:all .3s;border-radius:2px;}
+.filter-btn:hover{border-color:var(--gold);color:var(--gold);}
+.filter-btn.active{background:var(--emerald);border-color:var(--emerald-bright);color:var(--white);}
+.templates-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:24px;}
+.template-item{position:relative;overflow:hidden;border-radius:4px;aspect-ratio:1;cursor:none;transition:all .4s ease;}
+.template-item::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(15,61,46,0.4),rgba(201,169,110,0.1));opacity:0;transition:opacity .4s;}
+.template-item:hover::before{opacity:1;}
+.template-bg{position:absolute;inset:0;background:linear-gradient(135deg,#0d2420,#0a1a14);display:flex;align-items:center;justify-content:center;font-size:3rem;color:rgba(201,169,110,0.2);}
+.template-overlay{position:absolute;inset:0;background:linear-gradient(180deg,transparent 0%,rgba(8,8,8,0.88) 100%);display:flex;flex-direction:column;justify-content:flex-end;padding:24px;opacity:0;transition:opacity .4s;z-index:2;}
+.template-item:hover .template-overlay{opacity:1;}
+.template-name{font-family:'Playfair Display',serif;font-size:1.1rem;color:var(--white);margin-bottom:8px;}
+.template-desc{font-size:.8rem;color:var(--muted);margin-bottom:16px;line-height:1.5;}
+.template-btn{background:var(--emerald);border:1px solid var(--emerald-bright);color:var(--white);padding:8px 16px;font-size:.7rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;cursor:none;border-radius:2px;transition:all .3s;width:100%;}
+.template-btn:hover{background:var(--emerald-bright);}
+#ai-generator{background:var(--charcoal);}
+.ai-inner{display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:start;}
+.ai-form-wrap{display:flex;flex-direction:column;gap:24px;}
+.form-field{display:flex;flex-direction:column;gap:8px;}
+.ai-label{font-size:.8rem;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);font-weight:600;}
+.ai-input{background:rgba(255,255,255,0.02);border:1px solid var(--border);color:var(--white);padding:12px 16px;font-family:'DM Sans',sans-serif;font-size:.9rem;border-radius:2px;resize:vertical;transition:all .3s;width:100%;}
+.ai-input:focus{outline:none;border-color:var(--gold);background:rgba(255,255,255,0.04);box-shadow:0 0 0 3px rgba(201,169,110,0.08);}
+.style-presets{display:flex;gap:8px;flex-wrap:wrap;}
+.preset-btn{background:transparent;border:1px solid var(--border2);color:var(--muted);padding:8px 16px;font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;cursor:none;border-radius:2px;transition:all .3s;}
+.preset-btn:hover{border-color:var(--gold);color:var(--gold);}
+.preset-btn.active{background:var(--emerald);border-color:var(--emerald-bright);color:var(--white);}
+.ai-generate-btn{background:var(--emerald);border:1px solid var(--emerald-bright);color:var(--white);padding:14px 32px;font-family:'DM Sans',sans-serif;font-size:.82rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;cursor:none;border-radius:2px;transition:all .3s;display:flex;align-items:center;gap:10px;width:100%;justify-content:center;position:relative;overflow:hidden;}
+.ai-generate-btn:not(:disabled):hover{background:var(--emerald-bright);transform:translateY(-2px);}
+.ai-generate-btn:disabled{opacity:.5;cursor:not-allowed;transform:none;}
+/* Pulse animation on idle generate button */
+.ai-generate-btn:not(:disabled)::after{content:'';position:absolute;inset:0;border-radius:2px;box-shadow:0 0 0 0 rgba(26,94,66,0.6);animation:genPulse 2.5s ease-in-out infinite;}
+@keyframes genPulse{0%{box-shadow:0 0 0 0 rgba(26,94,66,0.6);}70%{box-shadow:0 0 0 10px rgba(26,94,66,0);}100%{box-shadow:0 0 0 0 rgba(26,94,66,0);}}
+.generate-icon{width:18px;height:18px;position:relative;z-index:1;}
+.ai-result-wrap{display:flex;flex-direction:column;gap:16px;}
+.ai-placeholder{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:300px;background:linear-gradient(135deg,rgba(15,61,46,0.2),rgba(201,169,110,0.05));border:1px dashed var(--border2);border-radius:4px;padding:40px;}
+.placeholder-icon{font-size:3rem;color:rgba(201,169,110,0.3);margin-bottom:16px;}
+.placeholder-text{text-align:center;color:var(--muted);font-size:.9rem;line-height:1.6;}
+.ai-loading-state{display:none;flex-direction:column;align-items:center;justify-content:center;min-height:300px;background:linear-gradient(135deg,rgba(15,61,46,0.2),rgba(201,169,110,0.05));border:1px solid var(--border);border-radius:4px;}
+.loading-ring{width:48px;height:48px;border:2px solid rgba(201,169,110,0.2);border-top-color:var(--gold);border-radius:50%;animation:spin 1s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg);}}
+.loading-steps{margin-top:24px;display:flex;flex-direction:column;gap:8px;text-align:center;}
+.load-step{font-size:.8rem;color:var(--muted2);transition:color .3s;}
+.load-step.active{color:var(--gold);}
+.ai-error{display:none;background:rgba(200,50,50,0.1);border:1px solid rgba(200,50,50,0.3);color:#ff6b6b;padding:16px;border-radius:2px;font-size:.9rem;line-height:1.6;}
+/* BUG-04 FIXED: ai-result-card is now outside ai-result-wrap, correctly structured */
+.ai-image-card{display:none;background:rgba(255,255,255,0.02);border:1px solid var(--border);border-radius:4px;overflow:hidden;}
+.ai-image-card img{width:100%;height:auto;display:block;}
+.ai-image-meta{padding:20px;display:flex;flex-direction:column;gap:16px;}
+.ai-image-desc{font-size:.9rem;color:var(--muted);line-height:1.6;}
+.ai-image-actions{display:flex;gap:12px;flex-wrap:wrap;}
+.ai-action-btn{background:transparent;border:1px solid var(--border2);color:var(--gold);padding:8px 16px;font-size:.75rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;cursor:none;border-radius:2px;transition:all .3s;}
+.ai-action-btn:hover{background:var(--emerald);border-color:var(--emerald-bright);color:var(--white);}
+.ai-image-count{font-size:.8rem;color:var(--muted2);text-align:center;padding:8px 0;}
+.ai-images-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:4px;}
+#about{background:var(--obsidian);}
+.about-inner{display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:center;}
+.about-visual{position:relative;}
+.about-img-wrap{position:relative;aspect-ratio:3/4;border-radius:4px;overflow:hidden;border:1px solid var(--border2);}
+.about-img-bg{position:absolute;inset:0;background:linear-gradient(135deg,#0d2420,#0a1a14);}
+.about-badge{position:absolute;bottom:24px;left:24px;background:rgba(14,14,14,0.9);backdrop-filter:blur(16px);border:1px solid var(--border2);border-radius:12px;padding:16px 20px;z-index:10;}
+.about-badge-num{font-family:'Playfair Display',serif;font-size:1.8rem;color:var(--gold);font-weight:600;}
+.about-badge-text{font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);}
+.about-text{display:flex;flex-direction:column;gap:24px;}
+.about-text p{font-size:.95rem;color:var(--muted);line-height:1.8;}
+.about-stats{display:grid;grid-template-columns:repeat(2,1fr);gap:32px;margin-top:32px;padding-top:32px;border-top:1px solid var(--border);}
+.a-stat-num{font-family:'Playfair Display',serif;font-size:2.2rem;color:var(--gold);font-weight:600;margin-bottom:4px;}
+.a-stat-label{font-size:.8rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);}
+#faq{background:var(--charcoal);}
+.faq-container{max-width:800px;margin:0 auto;}
+.faq-item{border-bottom:1px solid var(--border);padding:24px 0;}
+.faq-item:last-child{border-bottom:none;}
+.faq-question{display:flex;align-items:center;justify-content:space-between;cursor:pointer;transition:all .3s;gap:16px;}
+.faq-question:hover{color:var(--gold);}
+.faq-q-text{font-family:'Playfair Display',serif;font-size:1.1rem;font-weight:600;flex:1;}
+.faq-toggle{width:28px;height:28px;display:flex;align-items:center;justify-content:center;color:var(--gold);font-size:1.4rem;flex-shrink:0;transition:transform .3s;border:1px solid var(--border2);border-radius:50%;}
+/* BUG-12 FIXED: Toggle rotates to show − not upside-down + */
+.faq-item.open .faq-toggle{background:var(--emerald);border-color:var(--emerald-bright);}
+.faq-answer{max-height:0;overflow:hidden;transition:max-height .4s ease;color:var(--muted);font-size:.95rem;line-height:1.8;}
+.faq-item.open .faq-answer{max-height:500px;padding-top:16px;}
+#refund-policy{background:var(--obsidian);}
+.policy-content{max-width:900px;margin:0 auto;}
+.policy-section{margin-bottom:40px;}
+.policy-section h3{font-family:'Playfair Display',serif;font-size:1.3rem;color:var(--gold);margin-bottom:16px;}
+.policy-section p{font-size:.95rem;color:var(--muted);line-height:1.8;margin-bottom:12px;}
+.policy-list{list-style:none;padding-left:0;}
+.policy-list li{font-size:.95rem;color:var(--muted);line-height:1.8;margin-bottom:12px;padding-left:24px;position:relative;}
+.policy-list li::before{content:'✦';position:absolute;left:0;color:var(--gold);}
+#contact{background:var(--charcoal);}
+.contact-inner{display:grid;grid-template-columns:1fr 1fr;gap:64px;}
+.contact-info h3{font-family:'Playfair Display',serif;font-size:1.8rem;margin-bottom:16px;line-height:1.2;}
+.contact-info p{font-size:.95rem;color:var(--muted);line-height:1.8;margin-bottom:32px;}
+.contact-details{display:flex;flex-direction:column;gap:20px;}
+.contact-row{display:flex;gap:16px;}
+.contact-row-icon{font-size:1.4rem;}
+.contact-row-label{font-size:.75rem;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);margin-bottom:4px;}
+.contact-row-value{font-size:.95rem;color:var(--white);}
+.contact-row-value a{color:var(--gold);text-decoration:none;transition:color .3s;}
+.contact-row-value a:hover{color:var(--gold-light);}
+.contact-form{display:flex;flex-direction:column;gap:20px;}
+.field-label{font-size:.75rem;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);margin-bottom:8px;}
+.field-input{background:rgba(255,255,255,0.02);border:1px solid var(--border);color:var(--white);padding:12px 16px;font-family:'DM Sans',sans-serif;font-size:.9rem;border-radius:2px;transition:all .3s;width:100%;}
+.field-input:focus{outline:none;border-color:var(--gold);background:rgba(255,255,255,0.04);}
+textarea.field-input{resize:vertical;min-height:120px;}
+.submit-btn{background:var(--emerald);border:1px solid var(--emerald-bright);color:var(--white);padding:14px 32px;font-family:'DM Sans',sans-serif;font-size:.82rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;cursor:none;border-radius:2px;transition:all .3s;display:flex;align-items:center;justify-content:center;gap:12px;}
+.submit-btn:hover{background:var(--emerald-bright);transform:translateY(-2px);}
+footer{background:var(--charcoal);border-top:1px solid var(--border);padding:64px;position:relative;z-index:2;}
+.footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:48px;margin-bottom:48px;}
+.footer-brand p{font-size:.9rem;color:var(--muted);line-height:1.7;margin-top:16px;}
+.footer-col h5{font-family:'Playfair Display',serif;font-size:1rem;margin-bottom:20px;color:var(--white);}
+.footer-col ul{list-style:none;}
+.footer-col li{margin-bottom:12px;}
+.footer-col a{color:var(--muted);text-decoration:none;font-size:.9rem;transition:color .3s;}
+.footer-col a:hover{color:var(--gold);}
+.footer-bottom{display:flex;justify-content:space-between;align-items:center;padding-top:24px;border-top:1px solid var(--border);}
+.footer-copy{font-size:.8rem;color:var(--muted2);}
+.footer-socials{display:flex;gap:16px;}
+
+.social-icon{color:var(--muted);text-decoration:none;font-size:.8rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;transition:color .3s;}
+.social-icon:hover{color:var(--gold);}
+.modal{display:none;position:fixed;inset:0;background:rgba(8,8,8,0.85);backdrop-filter:blur(8px);z-index:1000;align-items:center;justify-content:center;padding:20px;}
+.modal.show{display:flex;}
+.modal-content{background:var(--charcoal);border:1px solid var(--border2);border-radius:4px;padding:48px;max-width:420px;width:100%;position:relative;animation:slideUp .4s cubic-bezier(0.16,1,0.3,1);}
+@keyframes slideUp{from{transform:translateY(40px);opacity:0;}to{transform:translateY(0);opacity:1;}}
+.modal-close{position:absolute;top:20px;right:20px;background:none;border:none;color:var(--muted);font-size:1.4rem;cursor:pointer;transition:color .3s;line-height:1;}
+.modal-close:hover{color:var(--white);}
+.modal-title{font-family:'Playfair Display',serif;font-size:1.8rem;margin-bottom:8px;color:var(--white);}
+.modal-subtitle{font-size:.9rem;color:var(--muted);margin-bottom:32px;}
+.modal-form{display:flex;flex-direction:column;gap:16px;}
+.modal-field{display:flex;flex-direction:column;gap:8px;}
+.modal-label{font-size:.8rem;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);}
+.modal-input{background:rgba(255,255,255,0.02);border:1px solid var(--border);color:var(--white);padding:12px 16px;font-family:'DM Sans',sans-serif;font-size:.9rem;border-radius:2px;transition:all .3s;width:100%;}
+.modal-input:focus{outline:none;border-color:var(--gold);background:rgba(255,255,255,0.04);box-shadow:0 0 0 3px rgba(201,169,110,0.08);}
+.modal-err{display:none;color:#ff6b6b;background:rgba(200,50,50,0.12);border:1px solid rgba(200,50,50,0.3);padding:10px 14px;border-radius:2px;font-size:.82rem;margin-bottom:4px;line-height:1.5;}
+.modal-submit{background:var(--emerald);border:1px solid var(--emerald-bright);color:var(--white);padding:12px 24px;font-family:'DM Sans',sans-serif;font-size:.82rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;border-radius:2px;transition:all .3s;margin-top:8px;}
+.modal-submit:hover{background:var(--emerald-bright);}
+.modal-submit:disabled{opacity:.5;cursor:not-allowed;}
+.modal-toggle{font-size:.85rem;color:var(--muted);text-align:center;margin-top:16px;}
+.modal-toggle a{color:var(--gold);cursor:pointer;transition:color .3s;}
+.modal-toggle a:hover{color:var(--gold-light);}
+#toast{position:fixed;bottom:32px;left:32px;background:rgba(14,14,14,0.97);backdrop-filter:blur(16px);border:1px solid var(--border2);border-left:2px solid var(--gold);border-radius:4px;padding:16px 24px;color:var(--white);font-size:.9rem;z-index:2000;opacity:0;transform:translateY(20px);transition:all .35s;pointer-events:none;max-width:360px;}
+#toast.show{opacity:1;transform:translateY(0);}
+.reveal,.reveal-left,.reveal-right{opacity:0;transform:translateY(32px);transition:opacity .8s ease,transform .8s cubic-bezier(0.16,1,0.3,1);}
+.reveal.visible{opacity:1;transform:translateY(0);}
+.reveal-left{transform:translateX(-32px);}
+.reveal-left.visible{opacity:1;transform:translateX(0);}
+.reveal-right{transform:translateX(32px);}
+.reveal-right.visible{opacity:1;transform:translateX(0);}
+@media(max-width:768px){
+  nav{padding:16px 24px;}
+  .nav-links{display:none;}
+  .section{padding:80px 24px;}
+  .hero-content{padding:120px 24px 60px;}
+  .hero-visual{display:none;}
+  .services-grid{grid-template-columns:1fr;}
+  .templates-grid{grid-template-columns:repeat(auto-fill,minmax(200px,1fr));}
+  .ai-inner{grid-template-columns:1fr;gap:40px;}
+  .about-inner{grid-template-columns:1fr;gap:40px;}
+  .contact-inner{grid-template-columns:1fr;gap:40px;}
+  .footer-grid{grid-template-columns:1fr;gap:32px;}
+  .footer-bottom{flex-direction:column;gap:16px;text-align:center;}
+}
+</style>
+</head>
+<body>
+
+<!-- BUG-10 FIXED: c-dot and c-ring are siblings, both position:fixed — correct -->
+<div id="c-dot" class="c-dot"></div>
+<div id="c-ring" class="c-ring"></div>
+<canvas id="bg-canvas"></canvas>
+<div class="noise"></div>
+
+<nav id="main-nav">
+  <a class="logo-mark" href="#">L'Amour<em> Interior Designs</em></a>
+  <ul class="nav-links">
+    <li><a href="#templates">Templates</a></li>
+    <li><a href="#ai-generator">AI Lab</a></li>
+    <li><a href="#about">About</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <div id="nav-auth">
+    <button class="nav-cta" id="nav-cta-btn" onclick="openSignup()">Get Started Free</button>
+    <button class="nav-cta" id="nav-user-btn" style="display:none;" onclick="handleLogout()">
+      <span id="nav-username"></span>&nbsp;· Sign Out
+    </button>
+  </div>
+</nav>
+
+<section id="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-content">
+    <div class="hero-eyebrow" id="hero-eyebrow">
+      <div class="eyebrow-line"></div>
+      <div class="eyebrow-text">Premium AI Interior Design</div>
+    </div>
+    <h1 class="hero-title" id="hero-title">
+      <div class="line"><span>Craft Your</span></div>
+      <div class="line"><span><em class="accent">Dream</em> Spaces</span></div>
+      <div class="line"><span>With AI</span></div>
+    </h1>
+    <p class="hero-sub" id="hero-sub">Describe your vision. Our AI transforms it into stunning photorealistic interior designs — dark luxury, minimalist, cyberpunk, any aesthetic, instantly visualised.</p>
+    <!-- BUG-08 FIXED: renamed scrollTo → scrollToSection to avoid shadowing window.scrollTo -->
+    <div class="hero-actions" id="hero-actions">
+      <button class="btn-primary" onclick="scrollToSection('#ai-generator')"><span>Generate Now</span></button>
+      <button class="btn-outline" onclick="scrollToSection('#templates')">Explore Templates</button>
+    </div>
+  </div>
+  <div class="hero-visual">
+    <div class="hero-img-wrap">
+      <div class="room-illustration">
+        <div class="room-bg-gradient"></div>
+        <div class="sofa room-el"></div>
+        <div class="plant-pot room-el"><div class="plant-stem"></div></div>
+        <div class="window-light"></div>
+        <div class="window-frame"></div>
+        <div class="coffee-table room-el"></div>
+        <div class="rug room-el"></div>
+        <div class="floor-lamp room-el"><div class="lamp-pole"></div><div class="lamp-head"></div><div class="lamp-glow"></div></div>
+        <div class="art-frame room-el"></div>
+        <div class="shelf room-el"></div>
+        <div class="vase room-el"></div>
+        <div class="floating-badge fb-1"><div class="fb-label">Emerald</div><div class="fb-value">Velvet</div><div class="fb-sub">Luxury Texture</div></div>
+        <div class="floating-badge fb-2"><div class="fb-label">Gold</div><div class="fb-value">Accent</div><div class="fb-sub">Premium Finish</div></div>
+        <div class="floating-badge fb-3"><div class="fb-label">4K</div><div class="fb-value">Render</div><div class="fb-sub">Ultra HD</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="marquee-wrap">
+  <div class="marquee-track">
+    <div class="marquee-item">✦ Dark Luxury Design <span class="marquee-dot"></span> AI-Powered Visualisation <span class="marquee-dot"></span> Premium Interiors <span class="marquee-dot"></span> Instant Renders <span class="marquee-dot"></span> Dark Luxury Design <span class="marquee-dot"></span> AI-Powered Visualisation <span class="marquee-dot"></span> Premium Interiors <span class="marquee-dot"></span> Instant Renders <span class="marquee-dot"></span></div>
+    <div class="marquee-item" aria-hidden="true">✦ Dark Luxury Design <span class="marquee-dot"></span> AI-Powered Visualisation <span class="marquee-dot"></span> Premium Interiors <span class="marquee-dot"></span> Instant Renders <span class="marquee-dot"></span> Dark Luxury Design <span class="marquee-dot"></span> AI-Powered Visualisation <span class="marquee-dot"></span> Premium Interiors <span class="marquee-dot"></span> Instant Renders <span class="marquee-dot"></span></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════════ -->
+
+<section class="section" id="services">
+  <div class="section-header reveal">
+    <div class="section-tag">Our Expertise</div>
+    <h2 class="section-title">Design <em>Services</em></h2>
+  </div>
+  <div class="services-grid">
+    <div class="service-card reveal" onmousemove="updateCardGlow(this,event)">
+      <div class="service-icon">🎨</div>
+      <h3 class="service-title">Spatial Design</h3>
+      <p class="service-desc">Thoughtfully crafted layouts that balance aesthetics with functionality, creating spaces that feel both luxurious and livable.</p>
+    </div>
+    <div class="service-card reveal" style="transition-delay:.1s" onmousemove="updateCardGlow(this,event)">
+      <div class="service-icon">✨</div>
+      <h3 class="service-title">AI Visualisation</h3>
+      <p class="service-desc">Photorealistic renders powered by advanced AI, allowing you to see your dream interior before a single piece is purchased.</p>
+    </div>
+    <div class="service-card reveal" style="transition-delay:.2s" onmousemove="updateCardGlow(this,event)">
+      <div class="service-icon">💡</div>
+      <h3 class="service-title">Lighting Design</h3>
+      <p class="service-desc">Strategic illumination that transforms spaces. From ambient warmth to dramatic accent lighting, we master the interplay of light and shadow.</p>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="templates">
+  <div class="section-header reveal">
+    <div class="section-tag">Inspiration Library</div>
+    <h2 class="section-title">Design <em>Templates</em></h2>
+  </div>
+  <div class="templates-filters reveal">
+    <button class="filter-btn active" onclick="filterTemplates(this,'all')">All (20)</button>
+    <button class="filter-btn" onclick="filterTemplates(this,'interior')">Interiors</button>
+    <button class="filter-btn" onclick="filterTemplates(this,'product')">Products</button>
+    <button class="filter-btn" onclick="filterTemplates(this,'social')">Social Media</button>
+    <button class="filter-btn" onclick="filterTemplates(this,'logo')">Logos</button>
+    <button class="filter-btn" onclick="filterTemplates(this,'wallpaper')">Wallpapers</button>
+  </div>
+  <div class="templates-grid" id="templates-grid"></div>
+</section>
+
+<section class="section" id="ai-generator">
+  <div class="section-header reveal">
+    <div class="section-tag">AI Image Lab</div>
+    <h2 class="section-title">Generate <em>Spaces</em></h2>
+  </div>
+  <div class="ai-inner">
+    <div class="ai-form-wrap reveal-left">
+      <div class="form-field">
+        <label class="ai-label">Describe Your Vision</label>
+        <textarea class="ai-input" id="ai-prompt" rows="5" placeholder="A dark luxury living room with emerald velvet sofa, soft gold lighting, and floor-to-ceiling bookshelves..."></textarea>
+      </div>
+      <div>
+        <label class="ai-label" style="margin-bottom:12px;display:block;">Style Preset</label>
+        <div class="style-presets">
+          <button class="preset-btn active" onclick="setPreset(this,'Dark Luxury')">Dark Luxury</button>
+          <button class="preset-btn" onclick="setPreset(this,'Minimalist')">Minimalist</button>
+          <button class="preset-btn" onclick="setPreset(this,'Cyberpunk')">Cyberpunk</button>
+          <button class="preset-btn" onclick="setPreset(this,'Realistic')">Realistic</button>
+          <button class="preset-btn" onclick="setPreset(this,'Wabi-Sabi')">Wabi-Sabi</button>
+          <button class="preset-btn" onclick="setPreset(this,'Art Deco')">Art Deco</button>
+        </div>
+      </div>
+      <button class="ai-generate-btn" id="ai-gen-btn" onclick="generateAIImages()">
+        <svg class="generate-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
+        <span id="gen-btn-text">Generate Design</span>
+      </button>
+    </div>
+    <!-- BUG-04 FIXED: All divs properly closed with comments for clarity -->
+    <div class="ai-result-wrap reveal-right">
+      <div class="ai-placeholder" id="ai-placeholder">
+        <div class="placeholder-icon">✦</div>
+        <div class="placeholder-text">Describe your dream interior and click Generate.<br/>Your AI-crafted space will appear here.</div>
+      </div>
+      <div class="ai-loading-state" id="ai-loading">
+        <div class="loading-ring"></div>
+        <div class="loading-steps">
+          <div class="load-step" id="ls1">Parsing your design brief</div>
+          <div class="load-step" id="ls2">Composing spatial layout</div>
+          <div class="load-step" id="ls3">Selecting materials &amp; palette</div>
+          <div class="load-step" id="ls4">Generating images via AI</div>
+          <div class="load-step" id="ls5">Finalising render</div>
+          <div style="font-size:.7rem;color:var(--muted2);margin-top:12px;text-align:center;" id="gen-provider-note">Powered by Cloudflare AI (free tier)</div>
+        </div>
+      </div>
+      <div class="ai-error" id="ai-error"></div>
+      <div class="ai-image-card" id="ai-result-card">
+        <img id="ai-result-img" src="" alt="AI generated interior" loading="lazy" style="opacity:0;transition:opacity .5s ease;"/>
+        <div class="ai-image-meta">
+          <div class="ai-image-desc" id="ai-result-desc"></div>
+          <div class="ai-image-actions">
+            <button class="ai-action-btn" onclick="downloadImage()">↓ Download</button>
+            <button class="ai-action-btn" onclick="regenerate()">↺ Regenerate</button>
+            <button class="ai-action-btn" onclick="shareImage()">⤴ Share</button>
+          </div>
+        </div>
+        <div class="ai-images-grid" id="ai-images-grid"></div>
+        <div class="ai-image-count" id="ai-count"></div>
+      </div><!-- /ai-result-card -->
+    </div><!-- /ai-result-wrap -->
+  </div><!-- /ai-inner -->
+</section>
+
+<section class="section" id="about">
+  <div class="about-inner">
+    <div class="about-visual reveal-left">
+      <div class="about-img-wrap">
+        <div class="about-img-bg"></div>
+        <svg width="100%" height="100%" viewBox="0 0 400 520" fill="none" style="position:absolute;inset:0;">
+          <rect width="400" height="520" fill="#0a1a14"/>
+          <rect x="80" y="40" width="240" height="320" fill="#0d2010" rx="2"/>
+          <rect x="100" y="60" width="80" height="120" fill="rgba(201,169,110,0.06)"/>
+          <rect x="200" y="60" width="100" height="120" fill="rgba(201,169,110,0.04)"/>
+          <rect x="40" y="380" width="320" height="90" fill="#0b1c10" rx="4"/>
+          <rect x="60" y="395" width="80" height="60" fill="#0e2416" rx="2"/>
+          <rect x="180" y="400" width="100" height="55" fill="#0c2014" rx="2"/>
+          <rect x="100" y="350" width="200" height="32" fill="#091409" rx="2"/>
+          <rect x="300" y="180" width="3" height="200" fill="rgba(201,169,110,0.3)"/>
+          <ellipse cx="301" cy="168" rx="22" ry="14" fill="rgba(201,169,110,0.15)"/>
+          <ellipse cx="200" cy="490" rx="160" ry="18" fill="rgba(15,61,46,0.4)"/>
+        </svg>
+      </div>
+      <div class="about-badge">
+        <div class="about-badge-num">5+</div>
+        <div class="about-badge-text">Years of Excellence</div>
+      </div>
+    </div>
+    <div class="about-text reveal-right">
+      <div class="section-tag" style="margin-bottom:20px;">Our Story</div>
+      <h2 class="section-title" style="margin-bottom:32px;">Design born from <em>darkness</em></h2>
+      <p>L'Amour Interior Designs emerged from a singular conviction: that truly extraordinary spaces are defined not by what is illuminated, but by what is held in shadow.</p>
+      <p>Our team combines traditional craftsmanship with AI-augmented visualisation tools, delivering a process that is both deeply human and breathtakingly precise. We take on fewer than twelve projects annually, ensuring every client receives our complete attention.</p>
+      <p>Based in India, working globally. From luxury penthouses to boutique hotels, our signature aesthetic adapts to every culture while retaining its essential character: restrained, confident, unforgettable.</p>
+      <div class="about-stats">
+        <div><div class="a-stat-num" id="stat-projects">0</div><div class="a-stat-label">Projects Completed</div></div>
+        <div><div class="a-stat-num" id="stat-awards">0</div><div class="a-stat-label">Design Awards</div></div>
+        <div><div class="a-stat-num">12</div><div class="a-stat-label">Annual Projects</div></div>
+        <div><div class="a-stat-num">100%</div><div class="a-stat-label">Client Satisfaction</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="faq">
+  <div class="section-header reveal">
+    <div class="section-tag">Questions</div>
+    <h2 class="section-title">Frequently Asked <em>Questions</em></h2>
+  </div>
+  <div class="faq-container reveal" id="faq-container"></div>
+</section>
+
+<section class="section" id="refund-policy">
+  <div class="section-header reveal">
+    <div class="section-tag">Policies</div>
+    <h2 class="section-title">Refund <em>Policy</em></h2>
+  </div>
+  <div class="policy-content reveal">
+    <div class="policy-section">
+      <h3>Company Information</h3>
+      <p><strong>L'Amour Interior Designs</strong> is based in India and operates as a digital design services provider. We specialise in AI-powered interior design visualisation and consultation services.</p>
+    </div>
+    <div class="policy-section">
+      <h3>Digital Products Policy</h3>
+      <p>Our services are primarily digital in nature. Digital products are non-refundable once delivered or accessed.</p>
+    </div>
+    <div class="policy-section">
+      <h3>Limited Refund Conditions</h3>
+      <ul class="policy-list">
+        <li>Service failure or technical error on our part preventing access to purchased services</li>
+        <li>Duplicate charges within 24 hours</li>
+        <li>Unauthorised transactions (with proper verification)</li>
+        <li>Refund requests must be submitted within 7 days of purchase</li>
+      </ul>
+    </div>
+    <div class="policy-section">
+      <h3>How to Request a Refund</h3>
+      <!-- BUG-11 FIXED: Removed Cloudflare obfuscation — direct mailto link -->
+      <p>Contact us at <a href="mailto:hello@lamourdesigns.in" style="color:var(--gold)">hello@lamourdesigns.in</a> with your order details. We will respond within 5 business days.</p>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="contact">
+  <div class="contact-inner">
+    <div class="contact-info reveal-left">
+      <div class="section-tag" style="margin-bottom:20px;">Get In Touch</div>
+      <h3>Let's build something <em style="color:var(--gold);font-style:italic;">extraordinary</em></h3>
+      <p>We welcome enquiries from discerning clients who understand that a truly exceptional interior is among the finest investments one can make.</p>
+      <div class="contact-details">
+        <div class="contact-row">
+          <div class="contact-row-icon">✉️</div>
+          <!-- BUG-11 FIXED: Direct mailto, no Cloudflare obfuscation -->
+          <div><div class="contact-row-label">Email</div><div class="contact-row-value"><a href="mailto:hello@lamourdesigns.in" style="color:var(--gold)">hello@lamourdesigns.in</a></div></div>
+        </div>
+        <div class="contact-row">
+          <div class="contact-row-icon">📱</div>
+          <div><div class="contact-row-label">Instagram</div><div class="contact-row-value"><a href="https://instagram.com/el_.lalit" target="_blank" rel="noopener">@el_.lalit</a></div></div>
+        </div>
+      </div>
+    </div>
+    <div class="contact-form reveal-right">
+      <div class="form-field">
+        <label class="field-label">Full Name</label>
+        <input class="field-input" id="cf-name" type="text" placeholder="Your name"/>
+      </div>
+      <div class="form-field">
+        <label class="field-label">Email Address</label>
+        <input class="field-input" id="cf-email" type="email" placeholder="your@email.com"/>
+      </div>
+      <div class="form-field">
+        <label class="field-label">Project Type</label>
+        <input class="field-input" id="cf-project" type="text" placeholder="Residential / Commercial / Hospitality"/>
+      </div>
+      <div class="form-field">
+        <label class="field-label">Tell us about your project</label>
+        <textarea class="field-input" id="cf-message" placeholder="Describe your space, aspirations, and timeline..."></textarea>
+      </div>
+      <button class="submit-btn" onclick="submitContactForm()">
+        <span>Send Enquiry</span><span>→</span>
+      </button>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <a class="logo-mark" href="#">L'Amour<em> Interior Designs</em></a>
+      <p>Founder &amp; AI Architect — Lalit Gangwar<br/>Design Team — Himanshu Pujari, Mohd. Afreed<br/><br/>India-based. Globally recognised. Dark luxury interiors for those who understand that true sophistication lives in the space between light and shadow.</p>
+    </div>
+    <div class="footer-col">
+      <h5>Services</h5>
+      <ul>
+        <li><a href="#services">Spatial Design</a></li>
+        <li><a href="#services">AI Visualisation</a></li>
+        <li><a href="#services">Lighting Design</a></li>
+        <li><a href="#contact">Consultations</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h5>Studio</h5>
+      <ul>
+        <li><a href="#about">About</a></li>
+        <li><a href="#templates">Templates</a></li>
+        <li><a href="#faq">FAQ</a></li>
+        <li><a href="#refund-policy">Refund Policy</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h5>Connect</h5>
+      <ul>
+        <li><a href="https://instagram.com/el_.lalit" target="_blank" rel="noopener">Instagram</a></li>
+        <li><a href="mailto:hello@lamourdesigns.in">Email</a></li>
+        <li><a href="#contact">Get Started</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div class="footer-copy">© 2025 L'Amour Interior Designs. All rights reserved.</div>
+    <div class="footer-socials">
+      <a class="social-icon" href="https://instagram.com/el_.lalit" target="_blank" rel="noopener">Instagram</a>
+      <a class="social-icon" href="mailto:hello@lamourdesigns.in">Email</a>
+    </div>
+  </div>
+</footer>
+
+<!-- SIGNUP MODAL -->
+<div class="modal" id="signup-modal">
+  <div class="modal-content">
+    <button class="modal-close" onclick="closeSignup()" aria-label="Close signup modal">×</button>
+    <h2 class="modal-title">Get Started Free</h2>
+    <p class="modal-subtitle">Create your account and start generating stunning interiors</p>
+    <div class="modal-err" id="su-error"></div>
+    <form class="modal-form" onsubmit="handleSignup(event)">
+      <div class="modal-field">
+        <label class="modal-label">Full Name</label>
+        <input class="modal-input" id="su-name" type="text" required placeholder="Your name" autocomplete="name"/>
+      </div>
+      <div class="modal-field">
+        <label class="modal-label">Email Address</label>
+        <input class="modal-input" id="su-email" type="email" required placeholder="your@email.com" autocomplete="email"/>
+      </div>
+      <div class="modal-field">
+        <label class="modal-label">Password</label>
+        <input class="modal-input" id="su-pass" type="password" required placeholder="Min 6 characters" autocomplete="new-password"/>
+      </div>
+      <button class="modal-submit" id="su-btn" type="submit">Create Account</button>
+    </form>
+    <div class="modal-toggle">Already have an account? <a onclick="switchToLogin()">Log in</a></div>
+  </div>
+</div>
+
+<!-- LOGIN MODAL -->
+<div class="modal" id="login-modal">
+  <div class="modal-content">
+    <button class="modal-close" onclick="closeLogin()" aria-label="Close login modal">×</button>
+    <h2 class="modal-title">Welcome Back</h2>
+    <p class="modal-subtitle">Log in to your account</p>
+    <div class="modal-err" id="li-error"></div>
+    <form class="modal-form" onsubmit="handleLogin(event)">
+      <div class="modal-field">
+        <label class="modal-label">Email Address</label>
+        <input class="modal-input" id="li-email" type="email" required placeholder="your@email.com" autocomplete="email"/>
+      </div>
+      <div class="modal-field">
+        <label class="modal-label">Password</label>
+        <input class="modal-input" id="li-pass" type="password" required placeholder="Your password" autocomplete="current-password"/>
+      </div>
+      <button class="modal-submit" id="li-btn" type="submit">Log In</button>
+    </form>
+    <div class="modal-toggle">Don't have an account? <a onclick="switchToSignup()">Sign up free</a></div>
+  </div>
+</div>
+
+<div id="toast"><span id="toast-msg"></span></div>
+
+<!-- ═══════════════════════════════════════
+     FIREBASE SDK v10.12.0
+     Auth ✅  Firestore ✅  Storage ✅
+═══════════════════════════════════════ -->
+<script type="module">
+import { initializeApp }
+  from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import {
+  getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword,
+  signOut, onAuthStateChanged, updateProfile
+} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+import {
+  getFirestore, doc, setDoc, getDoc,
+  collection, addDoc, serverTimestamp
+} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import { getStorage }
+  from "https://www.gstatic.com/firebasejs/10.12.0/firebase-storage.js";
+
+const firebaseConfig = {
+  apiKey:            "AIzaSyBZZqQICUYloFNf0jw_Mu-xW7F_sPR8wwQ",
+  authDomain:        "lamour-ai.firebaseapp.com",
+  projectId:         "lamour-ai",
+  storageBucket:     "lamour-ai.firebasestorage.app",
+  messagingSenderId: "193859051867",
+  appId:             "1:193859051867:web:fb8b76d8bfc12068a5fa7e"
+};
+
+const fbApp     = initializeApp(firebaseConfig);
+const fbAuth    = getAuth(fbApp);
+const fbDb      = getFirestore(fbApp);
+const fbStorage = getStorage(fbApp);
+
+window._fb = {
+  auth:    fbAuth,
+  db:      fbDb,
+  storage: fbStorage,
+  createUser:        (e,p) => createUserWithEmailAndPassword(fbAuth, e, p),
+  signIn:            (e,p) => signInWithEmailAndPassword(fbAuth, e, p),
+  signOut:           ()    => signOut(fbAuth),
+  onAuthStateChanged:(cb)  => onAuthStateChanged(fbAuth, cb),
+  updateProfile,
+  doc, setDoc, getDoc, collection, addDoc, serverTimestamp
+};
+
+window._fbReady = true;
+window.dispatchEvent(new Event('firebaseReady'));
+console.log('%c✅ Firebase Auth + Firestore + Storage ready', 'color:#c9a96e;font-weight:bold;font-size:12px');
+</script>
+
+<script>
+"use strict";
+// LAMOUR INTERIOR DESIGNS - PRODUCTION JS v4.0
+
+// ── Data ─────────────────────────────────────────────────
+const TEMPLATES = [
+  { id:1,  name:"Obsidian Sanctuary",  desc:"Dark walls, gold accents, plush velvet",        category:"interior",  icon:"🏠", prompt:"Dark luxury master bedroom, obsidian black walls, gold leaf ceiling detail, emerald velvet headboard, soft amber lamp glow, 8K photorealistic" },
+  { id:2,  name:"Emerald Study",       desc:"Leather, dark wood, warm brass",                category:"interior",  icon:"📚", prompt:"Dark luxury home library, deep emerald walls, cognac leather chesterfield, brass reading lamp, floor to ceiling bookshelves, 8K photorealistic" },
+  { id:3,  name:"Midnight Kitchen",    desc:"Black marble, brushed gold hardware",           category:"interior",  icon:"🍽️", prompt:"Luxury dark kitchen, black marble countertops, brushed gold fixtures, hidden lighting under cabinets, professional grade appliances, 8K photorealistic" },
+  { id:4,  name:"Velvet Lounge",       desc:"Curved sofa, moody lighting, art deco",         category:"interior",  icon:"🛋️", prompt:"Art deco living room, curved velvet sofa in midnight blue, geometric gold wall panels, statement chandelier, 8K photorealistic" },
+  { id:5,  name:"Crystal Bath",        desc:"Onyx stone, gold taps, candlelit",              category:"interior",  icon:"🛁", prompt:"Luxury bathroom, onyx stone walls, freestanding bathtub, gold fixtures, ambient candlelight, steam and mist, 8K photorealistic" },
+  { id:6,  name:"Cyber Loft",          desc:"Neon accents, industrial, holographic",         category:"interior",  icon:"🌆", prompt:"Cyberpunk loft apartment, neon purple and blue lighting, exposed concrete, holographic art displays, futuristic furniture, 8K photorealistic" },
+  { id:7,  name:"Wabi-Sabi Retreat",   desc:"Natural wood, linen, earthy calm",              category:"interior",  icon:"🌿", prompt:"Wabi-sabi living room, weathered oak floors, natural linen sofa, clay pottery, soft natural light, Japanese minimalist aesthetic, 8K photorealistic" },
+  { id:8,  name:"Gold Dining Room",    desc:"Dramatic chandelier, dark table",               category:"interior",  icon:"🕯️", prompt:"Luxury dining room, dramatic chandelier, dark walnut dining table for eight, gold chiavari chairs, rich burgundy walls, 8K photorealistic" },
+  { id:9,  name:"Penthouse View",      desc:"Floor-to-ceiling glass, city lights",           category:"interior",  icon:"🏙️", prompt:"Luxury penthouse living room, floor to ceiling windows, city skyline at night, minimal dark furniture, ambient floor lighting, 8K photorealistic" },
+  { id:10, name:"Emerald Product",     desc:"Luxury emerald product shoot",                  category:"product",   icon:"💎", prompt:"Luxury product photography, emerald green perfume bottle, black marble surface, gold dust, dramatic studio lighting, 8K" },
+  { id:11, name:"Gold Jewellery",      desc:"Dark luxury jewellery shoot",                   category:"product",   icon:"💍", prompt:"High-end jewellery photography, gold ring on black velvet, macro lens, studio lighting, minimalist luxury aesthetic, 8K" },
+  { id:12, name:"Dark Social Post",    desc:"Instagram luxury aesthetic",                    category:"social",    icon:"📸", prompt:"Dark luxury Instagram post, gold and black palette, minimalist text composition, interior design brand aesthetic, 8K" },
+  { id:13, name:"Gold Logo Concept",   desc:"Elegant brand mark on dark",                   category:"logo",      icon:"✦",  prompt:"Luxury brand logo design, gold lettermark on black background, serif typeface, architectural clean lines, premium identity" },
+  { id:14, name:"Abstract Wallpaper",  desc:"Dark gold gradient digital art",                category:"wallpaper", icon:"🎨", prompt:"Abstract dark luxury wallpaper, deep obsidian black, flowing gold dust particles, emerald highlights, 4K digital art" },
+  { id:15, name:"Emerald Wallpaper",   desc:"Rich emerald geometric",                        category:"wallpaper", icon:"🌑", prompt:"4K wallpaper, deep emerald green geometric pattern, gold accents, luxury dark aesthetic, digital art" },
+  { id:16, name:"Zen Bedroom",         desc:"Wabi-sabi, natural calm",                       category:"interior",  icon:"🌸", prompt:"Zen minimalist bedroom, wabi-sabi aesthetic, natural linen sheets, wooden bedside table, morning light, 8K photorealistic" },
+  { id:17, name:"Luxury Hotel Lobby",  desc:"Grand, marble, gold",                           category:"interior",  icon:"🏛️", prompt:"5-star hotel lobby, grand marble columns, enormous floral arrangement, crystal chandeliers, dark wood floor, 8K photorealistic" },
+  { id:18, name:"Brand Social Story",  desc:"Stories format luxury",                         category:"social",    icon:"📱", prompt:"Luxury brand Instagram story, black background, elegant serif font overlay, gold accent line, interior design studio aesthetic" },
+  { id:19, name:"Dark Product Flat",   desc:"Flat lay, black marble",                        category:"product",   icon:"🖤", prompt:"Luxury flat lay product photography, black marble background, gold accessories, branded packaging, overhead shot, 8K" },
+  { id:20, name:"Cosmic Wallpaper",    desc:"Space luxury dark art",                         category:"wallpaper", icon:"🌌", prompt:"4K cosmic dark wallpaper, deep space with golden nebula, luxury abstract digital art, obsidian black with gold star dust" }
+];
+
+const FAQS = [
+  { q:"What is L\u2019Amour Interior Designs?",
+    a:"L\u2019Amour is a premium AI-powered interior design studio based in India. We combine traditional design expertise with cutting-edge AI visualisation to create stunning, photorealistic interior concepts for residential, commercial, and hospitality clients." },
+  { q:"How does the AI image generation work?",
+    a:"You describe your vision in natural language. Our AI transforms your description into a high-quality photorealistic render in under 30 seconds, powered by Stable Diffusion XL." },
+  { q:"Do I need an account to generate images?",
+    a:"You can explore the site freely, but generating images requires a free account. Free accounts include 5 AI generations per day during a 30-day trial. After that, upgrade to Pro for unlimited generations." },
+  { q:"What style presets are available?",
+    a:"We offer six curated style presets: Dark Luxury (our signature), Minimalist, Cyberpunk, Realistic, Wabi-Sabi, and Art Deco. Each preset enriches your prompt with professional design language." },
+  { q:"Can I download my generated images?",
+    a:"Yes. Once an image is generated, click the Download button to save the full-resolution PNG directly to your device. Generated images are yours to keep and use." },
+  { q:"What is included in the free trial?",
+    a:"The free trial gives you full access for 30 days, including 5 AI generations per day, access to all style presets, the full template library, and the ability to download your creations." },
+  { q:"How do I get a refund?",
+    a:"We offer refunds for duplicate charges, technical failures, or unauthorised transactions within 7 days of purchase. Email hello@lamourdesigns.in with your order details." },
+  { q:"Is my data secure?",
+    a:"Yes. We use Firebase Authentication — your password is never stored by us. All API keys are server-side only. Generated images are stored securely in Firebase Storage with per-user access control." }
+];
+
+// ── State ────────────────────────────────────────────────
+var currentPreset = "Dark Luxury";
+var currentFilter = "all";
+var lastGeneratedUrl = null;
+var currentUser = null;
+var isGenerating = false;
+
+// ── Custom Cursor ─────────────────────────────────────────
+var dot  = document.getElementById("c-dot");
+var ring = document.getElementById("c-ring");
+var mx = window.innerWidth / 2, my = window.innerHeight / 2;
+var rx = mx, ry = my;
+
+document.addEventListener("mousemove", function(e) {
+  mx = e.clientX; my = e.clientY;
+  dot.style.left = mx + "px"; dot.style.top = my + "px";
+});
+
+document.querySelectorAll("a,button,[onclick]").forEach(function(el) {
+  el.addEventListener("mouseenter", function() { document.body.classList.add("hovering"); });
+  el.addEventListener("mouseleave", function() { document.body.classList.remove("hovering"); });
+});
+
+(function animateRing() {
+  rx += (mx - rx) * 0.12; ry += (my - ry) * 0.12;
+  ring.style.left = rx + "px"; ring.style.top = ry + "px";
+  requestAnimationFrame(animateRing);
+})();
+
+// ── Canvas Particles ──────────────────────────────────────
+(function initCanvas() {
+  var canvas = document.getElementById("bg-canvas");
+  if (!canvas) return;
+  var ctx = canvas.getContext("2d");
+  var W, H, particles = [];
+
+  function resize() { W = canvas.width = window.innerWidth; H = canvas.height = window.innerHeight; }
+  resize();
+  window.addEventListener("resize", resize);
+
+  for (var i = 0; i < 60; i++) {
+    particles.push({ x: Math.random()*window.innerWidth, y: Math.random()*window.innerHeight,
+      r: Math.random()*1.2+0.3, vx: (Math.random()-0.5)*0.25, vy: (Math.random()-0.5)*0.25, a: Math.random()*0.4+0.1 });
+  }
+
+  function draw() {
+    ctx.clearRect(0, 0, W, H);
+    particles.forEach(function(p) {
+      ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI*2);
+      ctx.fillStyle = "rgba(201,169,110," + p.a + ")"; ctx.fill();
+      p.x += p.vx; p.y += p.vy;
+      if (p.x < 0) p.x = W; if (p.x > W) p.x = 0;
+      if (p.y < 0) p.y = H; if (p.y > H) p.y = 0;
+    });
+    requestAnimationFrame(draw);
+  }
+  draw();
+})();
+
+// ── Hero Entrance ─────────────────────────────────────────
+(function heroEntrance() {
+  var els = [
+    { id: "hero-eyebrow", delay: 300 },
+    { id: "hero-title",   delay: 500 },
+    { id: "hero-sub",     delay: 700 },
+    { id: "hero-actions", delay: 900 }
+  ];
+  els.forEach(function(item) {
+    var el = document.getElementById(item.id);
+    if (!el) return;
+    setTimeout(function() {
+      el.style.transition = "opacity 0.9s ease, transform 0.9s cubic-bezier(0.16,1,0.3,1)";
+      el.style.opacity = "1";
+      el.style.transform = "translateY(0)";
+    }, item.delay);
+  });
+})();
+
+// ── Scroll Reveal ─────────────────────────────────────────
+var revealObserver = new IntersectionObserver(function(entries) {
+  entries.forEach(function(e) { if (e.isIntersecting) e.target.classList.add("visible"); });
+}, { threshold: 0.12 });
+document.querySelectorAll(".reveal,.reveal-left,.reveal-right").forEach(function(el) {
+  revealObserver.observe(el);
+});
+
+// ── Count Up Stats ────────────────────────────────────────
+function countUp(el, target, suffix) {
+  if (!el) return;
+  suffix = suffix || "";
+  var count = 0;
+  var step = Math.ceil(target / 40);
+  var timer = setInterval(function() {
+    count = Math.min(count + step, target);
+    el.textContent = count + suffix;
+    if (count >= target) clearInterval(timer);
+  }, 40);
+}
+
+var statsObserver = new IntersectionObserver(function(entries) {
+  entries.forEach(function(e) {
+    if (e.isIntersecting) {
+      countUp(document.getElementById("stat-projects"), 248, "+");
+      countUp(document.getElementById("stat-awards"), 17, "+");
+      statsObserver.disconnect();
+    }
+  });
+}, { threshold: 0.5 });
+var aboutSec = document.getElementById("about");
+if (aboutSec) statsObserver.observe(aboutSec);
+
+// ── Scroll To Section ─────────────────────────────────────
+function scrollToSection(selector) {
+  var el = document.querySelector(selector);
+  if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+}
+
+// ── Toast ─────────────────────────────────────────────────
+function showToast(msg, duration) {
+  duration = duration || 3500;
+  var t = document.getElementById("toast");
+  var m = document.getElementById("toast-msg");
+  if (!t || !m) return;
+  m.textContent = msg;
+  t.classList.add("show");
+  clearTimeout(t._timer);
+  t._timer = setTimeout(function() { t.classList.remove("show"); }, duration);
+}
+
+// ── Card Glow ─────────────────────────────────────────────
+function updateCardGlow(card, e) {
+  var r = card.getBoundingClientRect();
+  card.style.setProperty("--mx", ((e.clientX - r.left) / r.width * 100) + "%");
+  card.style.setProperty("--my", ((e.clientY - r.top)  / r.height * 100) + "%");
+}
+
+// ── Templates ─────────────────────────────────────────────
+function renderTemplates(filter) {
+  var grid = document.getElementById("templates-grid");
+  if (!grid) return;
+  var items = filter === "all" ? TEMPLATES : TEMPLATES.filter(function(t) { return t.category === filter; });
+  grid.innerHTML = items.map(function(t) {
+    return "<div class=\"template-item\">" +
+      "<div class=\"template-bg\">" + t.icon + "</div>" +
+      "<div class=\"template-overlay\">" +
+        "<div class=\"template-name\">" + t.name + "</div>" +
+        "<div class=\"template-desc\">" + t.desc + "</div>" +
+        "<button class=\"template-btn\" onclick=\"useTemplate(" + t.id + ")\">Use Template</button>" +
+      "</div></div>";
+  }).join("");
+}
+
+function filterTemplates(btn, filter) {
+  currentFilter = filter;
+  document.querySelectorAll(".filter-btn").forEach(function(b) { b.classList.remove("active"); });
+  btn.classList.add("active");
+  renderTemplates(filter);
+}
+
+function useTemplate(id) {
+  var t = TEMPLATES.find(function(x) { return x.id === id; });
+  if (!t) return;
+  var promptEl = document.getElementById("ai-prompt");
+  if (promptEl) promptEl.value = t.prompt;
+  scrollToSection("#ai-generator");
+  showToast("\u2726 Template loaded \u2014 click Generate to create your design");
+}
+
+// ── Style Presets ─────────────────────────────────────────
+function setPreset(btn, preset) {
+  currentPreset = preset;
+  document.querySelectorAll(".preset-btn").forEach(function(b) { b.classList.remove("active"); });
+  btn.classList.add("active");
+}
+
+// ── Auth State ────────────────────────────────────────────
+function waitForFirebase(cb) {
+  if (window._fbReady) { cb(); return; }
+  window.addEventListener("firebaseReady", cb, { once: true });
+}
+
+waitForFirebase(function() {
+  window._fb.onAuthStateChanged(function(user) {
+    currentUser = user;
+    var ctaBtn  = document.getElementById("nav-cta-btn");
+    var userBtn = document.getElementById("nav-user-btn");
+    var nameEl  = document.getElementById("nav-username");
+    if (user) {
+      if (ctaBtn)  ctaBtn.style.display  = "none";
+      if (userBtn) userBtn.style.display = "";
+      if (nameEl)  nameEl.textContent = user.displayName || user.email.split("@")[0];
+    } else {
+      if (ctaBtn)  ctaBtn.style.display  = "";
+      if (userBtn) userBtn.style.display = "none";
+    }
+  });
+});
+
+// ── Modals ────────────────────────────────────────────────
+function openSignup()    { document.getElementById("signup-modal").classList.add("show"); }
+function closeSignup()   { document.getElementById("signup-modal").classList.remove("show"); clearModalErr("su"); }
+function switchToLogin() { closeSignup(); openLogin(); }
+function openLogin()     { document.getElementById("login-modal").classList.add("show"); }
+function closeLogin()    { document.getElementById("login-modal").classList.remove("show"); clearModalErr("li"); }
+function switchToSignup(){ closeLogin(); openSignup(); }
+
+function clearModalErr(prefix) {
+  var el = document.getElementById(prefix + "-error");
+  if (el) { el.style.display = "none"; el.textContent = ""; }
+}
+function showModalErr(prefix, msg) {
+  var el = document.getElementById(prefix + "-error");
+  if (el) { el.style.display = "block"; el.textContent = msg; }
+}
+
+document.querySelectorAll(".modal").forEach(function(modal) {
+  modal.addEventListener("click", function(e) {
+    if (e.target === modal) modal.classList.remove("show");
+  });
+});
+
+async function handleSignup(e) {
+  e.preventDefault();
+  clearModalErr("su");
+  var name  = document.getElementById("su-name").value.trim();
+  var email = document.getElementById("su-email").value.trim();
+  var pass  = document.getElementById("su-pass").value;
+  var btn   = document.getElementById("su-btn");
+  if (!name || !email || !pass) return showModalErr("su", "Please fill in all fields.");
+  if (pass.length < 6) return showModalErr("su", "Password must be at least 6 characters.");
+  btn.disabled = true; btn.textContent = "Creating account\u2026";
+  try {
+    var cred = await window._fb.createUser(email, pass);
+    await window._fb.updateProfile(cred.user, { displayName: name });
+    closeSignup();
+    showToast("\u2726 Welcome to L\u2019Amour! Your account is ready.");
+    try {
+      var token = await cred.user.getIdToken();
+      await fetch("/api/user/create", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "Authorization": "Bearer " + token },
+        body: JSON.stringify({ name: name })
+      });
+    } catch(_) {}
+  } catch(err) {
+    var msg = err.code === "auth/email-already-in-use" ? "Email already registered. Try logging in." :
+              err.code === "auth/invalid-email"        ? "Invalid email address." :
+              err.code === "auth/weak-password"        ? "Password must be at least 6 characters." :
+              "Sign up failed. Please try again.";
+    showModalErr("su", msg);
+  } finally {
+    btn.disabled = false; btn.textContent = "Create Account";
+  }
+}
+
+async function handleLogin(e) {
+  e.preventDefault();
+  clearModalErr("li");
+  var email = document.getElementById("li-email").value.trim();
+  var pass  = document.getElementById("li-pass").value;
+  var btn   = document.getElementById("li-btn");
+  if (!email || !pass) return showModalErr("li", "Please fill in all fields.");
+  btn.disabled = true; btn.textContent = "Logging in\u2026";
+  try {
+    await window._fb.signIn(email, pass);
+    closeLogin();
+    showToast("\u2726 Welcome back.");
+  } catch(err) {
+    var codes = ["auth/user-not-found","auth/wrong-password","auth/invalid-credential"];
+    showModalErr("li", codes.indexOf(err.code) > -1 ? "Incorrect email or password." : "Login failed. Please try again.");
+  } finally {
+    btn.disabled = false; btn.textContent = "Log In";
+  }
+}
+
+async function handleLogout() {
+  await window._fb.signOut();
+  showToast("Signed out successfully.");
+}
+
+// ── AI Generation ─────────────────────────────────────────
+var LOADING_STEPS = ["ls1","ls2","ls3","ls4","ls5"];
+var loadTimer = null;
+
+function showLoading() {
+  document.getElementById("ai-placeholder").style.display = "none";
+  document.getElementById("ai-result-card").style.display = "none";
+  document.getElementById("ai-error").style.display       = "none";
+  var ls = document.getElementById("ai-loading");
+  ls.style.display = "flex";
+  LOADING_STEPS.forEach(function(id) {
+    var el = document.getElementById(id);
+    if (el) el.classList.remove("active");
+  });
+  var step = 0;
+  loadTimer = setInterval(function() {
+    if (step > 0) { var prev = document.getElementById(LOADING_STEPS[step-1]); if (prev) prev.classList.remove("active"); }
+    if (step < LOADING_STEPS.length) { var cur = document.getElementById(LOADING_STEPS[step]); if (cur) cur.classList.add("active"); step++; }
+  }, 900);
+}
+
+function hideLoading() {
+  clearInterval(loadTimer);
+  document.getElementById("ai-loading").style.display = "none";
+}
+
+function showError(msg) {
+  var el = document.getElementById("ai-error");
+  el.style.display = "block"; el.textContent = msg;
+}
+
+function showResult(url, desc) {
+  lastGeneratedUrl = url;
+  var card  = document.getElementById("ai-result-card");
+  var img   = document.getElementById("ai-result-img");
+  var descEl = document.getElementById("ai-result-desc");
+  img.src = url;
+  img.style.opacity = "0";
+  img.onload = function() { img.style.opacity = "1"; };
+  if (descEl) descEl.textContent = desc || "";
+  card.style.display = "block";
+}
+
+async function generateAIImages() {
+  if (isGenerating) return;
+  var promptEl = document.getElementById("ai-prompt");
+  var prompt = promptEl ? promptEl.value.trim() : "";
+  if (prompt.length < 5) {
+    showToast("\u26a0 Please describe your vision first (at least 5 characters).");
+    if (promptEl) promptEl.focus();
+    return;
+  }
+  if (!currentUser) {
+    showToast("\u2726 Create a free account to generate images");
+    openSignup(); return;
+  }
+  isGenerating = true;
+  var btn     = document.getElementById("ai-gen-btn");
+  var btnText = document.getElementById("gen-btn-text");
+  btn.disabled = true;
+  if (btnText) btnText.textContent = "Generating\u2026";
+  showLoading();
+  try {
+    var token = await currentUser.getIdToken();
+    var res = await fetch("/api/generate", {
+      method: "POST",
+      headers: { "Content-Type": "application/json", "Authorization": "Bearer " + token },
+      body: JSON.stringify({ prompt: prompt, style: currentPreset })
+    });
+    hideLoading();
+    var data = await res.json();
+    if (!res.ok) {
+      if (res.status === 429 && data.dailyLimit) showError("Daily generation limit reached (5/day on free plan). Upgrade for unlimited.");
+      else if (res.status === 403 && data.trialExpired) showError("Your free trial has expired. Please upgrade to continue.");
+      else showError(data.error || "Generation failed. Please try again.");
+      return;
+    }
+    var images = data.images || [];
+    if (images.length > 0) {
+      showResult(images[0], "\"" + prompt.substring(0,80) + (prompt.length > 80 ? "\u2026" : "") + "\" \u00b7 Style: " + currentPreset + " \u00b7 Provider: " + data.provider);
+      var grid  = document.getElementById("ai-images-grid");
+      var count = document.getElementById("ai-count");
+      if (grid) {
+        grid.innerHTML = images.slice(1).map(function(url) {
+          return "<img src=\"" + url + "\" alt=\"AI design variant\" style=\"width:100%;border-radius:2px;cursor:pointer;transition:opacity .3s;\" onclick=\"showResult('" + url + "',null)\" loading=\"lazy\"/>";
+        }).join("");
+      }
+      if (count) count.textContent = images.length > 1 ? (images.length + " variants generated") : "";
+      showToast("\u2726 Your design has been generated!");
+    } else {
+      showError("No image returned. Please try again.");
+    }
+  } catch(err) {
+    hideLoading();
+    showError(err.name === "TypeError" ? "Cannot connect to server. Make sure the backend is running." : "Generation failed. Please try again.");
+  } finally {
+    isGenerating = false;
+    btn.disabled = false;
+    if (btnText) btnText.textContent = "Generate Design";
+  }
+}
+
+function regenerate() { generateAIImages(); }
+
+function downloadImage() {
+  if (!lastGeneratedUrl) return showToast("No image to download yet.");
+  var a = document.createElement("a");
+  a.href = lastGeneratedUrl;
+  a.download = "lamour-design-" + Date.now() + ".png";
+  a.click();
+  showToast("\u2726 Download started");
+}
+
+function shareImage() {
+  if (!lastGeneratedUrl) return showToast("No image to share yet.");
+  if (navigator.share && lastGeneratedUrl.startsWith("http")) {
+    navigator.share({ title: "L\u2019Amour Interior Design", url: lastGeneratedUrl }).catch(function(){});
+  } else {
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(lastGeneratedUrl).then(function() {
+        showToast("\u2726 Image URL copied to clipboard");
+      }).catch(function() { showToast("\u2726 Right-click the image to save"); });
+    }
+  }
+}
+
+// ── FAQ ───────────────────────────────────────────────────
+(function renderFAQ() {
+  var container = document.getElementById("faq-container");
+  if (!container) return;
+  container.innerHTML = FAQS.map(function(f, i) {
+    return "<div class=\"faq-item\" id=\"faq-" + i + "\">" +
+      "<div class=\"faq-question\" onclick=\"toggleFAQ(" + i + ")\">" +
+        "<span class=\"faq-q-text\">" + f.q + "</span>" +
+        "<span class=\"faq-toggle\" id=\"ft-" + i + "\">+</span>" +
+      "</div>" +
+      "<div class=\"faq-answer\">" + f.a + "</div>" +
+    "</div>";
+  }).join("");
+})();
+
+function toggleFAQ(i) {
+  var item   = document.getElementById("faq-" + i);
+  var toggle = document.getElementById("ft-" + i);
+  var isOpen = item.classList.contains("open");
+  document.querySelectorAll(".faq-item").forEach(function(el) {
+    el.classList.remove("open");
+    var t = el.querySelector(".faq-toggle");
+    if (t) t.textContent = "+";
+  });
+  if (!isOpen) { item.classList.add("open"); toggle.textContent = "\u2212"; }
+}
+
+// ── Contact Form ──────────────────────────────────────────
+async function submitContactForm() {
+  var name    = (document.getElementById("cf-name")    || {value:""}).value.trim();
+  var email   = (document.getElementById("cf-email")   || {value:""}).value.trim();
+  var project = (document.getElementById("cf-project") || {value:""}).value.trim();
+  var message = (document.getElementById("cf-message") || {value:""}).value.trim();
+  if (!name || !email) return showToast("\u26a0 Please enter your name and email.");
+  if (email.indexOf("@") < 0) return showToast("\u26a0 Please enter a valid email address.");
+  try {
+    var res = await fetch("/api/contact", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ name: name, email: email, project: project, message: message })
+    });
+    if (res.ok) {
+      showToast("\u2726 Enquiry sent! We\u2019ll respond within 24 hours.");
+      ["cf-name","cf-email","cf-project","cf-message"].forEach(function(id) {
+        var el = document.getElementById(id); if (el) el.value = "";
+      });
+    } else {
+      showToast("Could not send. Please email hello@lamourdesigns.in directly.");
+    }
+  } catch(_) {
+    showToast("Could not connect. Please email hello@lamourdesigns.in directly.");
+  }
+}
+
+// ── Init ──────────────────────────────────────────────────
+renderTemplates("all");
+
+document.addEventListener("keydown", function(e) {
+  if (e.key === "Escape") {
+    document.querySelectorAll(".modal.show").forEach(function(m) { m.classList.remove("show"); });
+  }
+});
+
+</script>
+</body>
+</html>

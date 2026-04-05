@@ -1,0 +1,15 @@
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+    // Lock down by default
+    match /{allPaths=**} {
+      allow read, write: if false;
+    }
+
+    // Generations: Public READ, but NO public write (only server-side via Admin SDK)
+    match /generations/{userId}/{allPaths=**} {
+      allow read: if true;
+      allow write: if false;
+    }
+  }
+}

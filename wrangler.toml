@@ -1,0 +1,30 @@
+name            = "lamour-image-gen"
+main            = "src/index.js"
+compatibility_date = "2024-09-01"
+compatibility_flags = ["nodejs_compat"]
+
+# ── Workers AI binding (free tier — 10k neurons/day) ──
+[ai]
+binding = "AI"
+
+# ── Optional: Cloudflare R2 for permanent image storage ──
+# Uncomment when ready. Create bucket with: wrangler r2 bucket create lamour-images
+# [[r2_buckets]]
+# binding        = "IMAGES_BUCKET"
+# bucket_name    = "lamour-images"
+# preview_bucket_name = "lamour-images-dev"
+
+# ── Environment variables ──
+[vars]
+ENVIRONMENT     = "production"
+ALLOWED_ORIGINS = "https://lamour-interior-designs.vercel.app,https://lamourdesigns.in"
+
+# ── Development overrides ──
+[env.development]
+[env.development.vars]
+ENVIRONMENT     = "development"
+ALLOWED_ORIGINS = "http://localhost:3000"
+
+# ── Secrets (set via: wrangler secret put WORKER_SECRET) ──
+# WORKER_SECRET — shared between Express server and this Worker
+# Never put secrets in wrangler.toml itself
