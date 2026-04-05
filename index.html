@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>L'Amour Interior Designs</title>
+<style>
+body{background:#0b0b0b;color:white;font-family:sans-serif;text-align:center}
+img{max-width:90%;margin-top:20px;border-radius:10px}
+button{padding:12px 20px;background:#1f7a4c;color:white;border:none}
+</style>
+</head>
+<body>
+
+<h1>L'Amour Interior Designs</h1>
+
+<button onclick="generate()">Generate Design</button>
+<p id="desc"></p>
+<img id="img"/>
+
+<script>
+async function generate(){
+document.getElementById("desc").innerText="Generating...";
+
+const res = await fetch("/api/generate",{
+method:"POST",
+headers:{"Content-Type":"application/json"},
+body:JSON.stringify({prompt:"luxury interior design"})
+});
+
+const data = await res.json();
+
+document.getElementById("img").src=data.image;
+document.getElementById("desc").innerText=data.description;
+}
+</script>
+
+</body>
+</html>
