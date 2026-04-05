@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>L'Amour Interior Designs</title>
+
+<style>
+* {margin:0;padding:0;box-sizing:border-box;}
+
+body {
+  font-family: 'Segoe UI', sans-serif;
+  background: radial-gradient(circle at 20% 20%, #111, #000);
+  color: white;
+  text-align: center;
+  overflow-x: hidden;
+}
+
+body::before {
+  content:'';
+  position:fixed;
+  width:200%;
+  height:200%;
+  background: radial-gradient(circle, rgba(255,215,0,0.08), transparent 60%);
+  animation: moveBg 10s linear infinite;
+  z-index:-1;
+}
+@keyframes moveBg {
+  0% {transform: translate(0,0);}
+  50% {transform: translate(-25%, -25%);}
+  100% {transform: translate(0,0);}
+}
+
+h1 {
+  margin-top:50px;
+  font-size:42px;
+  color: gold;
+}
+
+.container {
+  margin-top:40px;
+  width:90%;
+  max-width:800px;
+  margin-left:auto;
+  margin-right:auto;
+  padding:30px;
+  border-radius:16px;
+  background: rgba(255,255,255,0.03);
+  backdrop-filter: blur(20px);
+  border:1px solid rgba(255,255,255,0.08);
+}
+
+textarea {
+  width:100%;
+  height:120px;
+  padding:15px;
+  background:#111;
+  color:white;
+  border:1px solid #333;
+  border-radius:10px;
+  font-size:16px;
+}
+
+.presets {
+  margin-top:15px;
+}
+
+.preset-btn {
+  display:inline-block;
+  margin:6px;
+  padding:8px 14px;
+  border:1px solid #444;
+  border-radius:6px;
+  cursor:pointer;
+  transition:0.3s;
+}
+
+.preset-btn:hover {
+  border-color:gold;
+  color:gold;
+  transform:scale(1.05);
+}
+
+button {
+  margin-top:20px;
+  padding:14px 30px;
+  font-size:16px;
+  background: linear-gradient(45deg, #0f9d58, #34a853);
+  border:none;
+  border-radius:10px;
+  cursor:pointer;
+}
+
+.output {
+  margin-top:30px;
+  padding:25px;
+  border-radius:14px;
+  background: rgba(20,20,20,0.95);
+  border:1px solid #333;
+  text-align:left;
+}
+</style>
+</head>
+
+<body>
+
+<h1>L'Amour Interior Designs</h1>
+
+<div class="container">
+
+<textarea id="prompt" placeholder="Describe your dream luxury interior..."></textarea>
+
+<div class="presets">
+  <span class="preset-btn" onclick="setPrompt('Dark luxury bedroom with gold accents')">Dark Luxury</span>
+  <span class="preset-btn" onclick="setPrompt('Minimalist modern white living room')">Minimalist</span>
+  <span class="preset-btn" onclick="setPrompt('Cyberpunk neon futuristic interior')">Cyberpunk</span>
+  <span class="preset-btn" onclick="setPrompt('Japanese wabi-sabi calm space')">Wabi-Sabi</span>
+</div>
+
+<button onclick="generateDesign()">Generate Design</button>
+
+<div id="result" class="output" style="display:none;"></div>
+
+</div>
+
+<script>
+function setPrompt(text) {
+  document.getElementById("prompt").value = text;
+}
+
+function generateDesign() {
+  const prompt = document.getElementById("prompt").value;
+  const result = document.getElementById("result");
+
+  if (!prompt.trim()) {
+    alert("Enter a design first");
+    return;
+  }
+
+  result.style.display = "block";
+  result.innerHTML = "<p style='color:gray;'>✨ Designing your space...</p>";
+
+  result.scrollIntoView({ behavior: "smooth" });
+
+  setTimeout(() => {
+    const descriptions = [
+      `A breathtaking luxury interior based on "${prompt}", featuring warm ambient lighting, rich textures, and elegant gold accents.`,
+      `An ultra-modern space inspired by "${prompt}" with cinematic lighting and premium materials.`,
+      `A high-end interior concept for "${prompt}" blending minimal elegance with luxurious depth.`,
+      `A stunning design vision where "${prompt}" becomes a rich and immersive premium space.`
+    ];
+
+    let text = descriptions[Math.floor(Math.random()*descriptions.length)];
+
+    let i = 0;
+    result.innerHTML = "<h3 style='color:gold;'>✨ AI Concept</h3><p id='typing'></p>";
+
+    function typeEffect() {
+      if (i < text.length) {
+        document.getElementById("typing").innerHTML += text.charAt(i);
+        i++;
+        setTimeout(typeEffect, 12);
+      }
+    }
+
+    typeEffect();
+  }, 600);
+}
+</script>
+
+</body>
+</html>
